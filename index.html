@@ -472,7 +472,9 @@
     }
 
     .invitation-date-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
       padding: 0.8rem 2.5rem;
       border: 1px solid var(--gold);
       font-size: 0.8rem;
@@ -482,6 +484,12 @@
       margin-top: 1.5rem;
       color: var(--gold-light);
       position: relative;
+    }
+
+    .badge-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--gold-light);
     }
 
     /* Boarding Pass */
@@ -714,6 +722,11 @@
       font-size: 1.2rem;
       margin-bottom: 0.4rem;
       color: var(--gold);
+    }
+
+    .bp-plane svg {
+      width: 18px;
+      height: 18px;
     }
 
     .bp-details {
@@ -1040,7 +1053,7 @@
       You are invited to the wedding of
       <div class="invitation-names">Majd & Tatiana</div>
     </div>
-    <div class="invitation-date-badge fade-in">June 27, 2027</div>
+    <div class="invitation-date-badge fade-in"><svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg> Lebanon &bull; June 27, 2027</div>
   </section>
 
   <!-- Boarding Pass -->
@@ -1068,7 +1081,7 @@
             <div class="bp-city-name">Engaged</div>
           </div>
           <div class="bp-route">
-            <div class="bp-plane">&#9992;</div>
+            <div class="bp-plane" id="bp-plane">&#9992;</div>
             <div class="bp-route-line"></div>
           </div>
           <div class="bp-city">
@@ -1194,6 +1207,13 @@
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
+
+    // Safari plane fix
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isSafari) {
+      const plane = document.getElementById('bp-plane');
+      plane.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/></svg>';
+    }
 
     // Navbar scroll effect
     const navbar = document.getElementById('navbar');
