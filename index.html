@@ -1103,32 +1103,46 @@
   </footer>
 
   <script>
-    // Save to Calendar (.ics file)
+    // Save to Calendar
     function saveToCalendar() {
-      const event = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Majd & Tatiana Wedding//EN',
-        'BEGIN:VEVENT',
-        'DTSTART:20270627T180000',
-        'DTEND:20270628T020000',
-        'SUMMARY:Majd & Tatiana Wedding',
-        'DESCRIPTION:The wedding celebration of Majd Khalife & Tatiana Ghanem',
-        'LOCATION:Lebanon',
-        'STATUS:CONFIRMED',
-        'END:VEVENT',
-        'END:VCALENDAR'
-      ].join('\r\n');
+      const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document;
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-      const blob = new Blob([event], { type: 'text/calendar;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'majd-tatiana-wedding.ics';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      if (isApple || isSafari) {
+        // iOS / Safari → .ics file (opens directly in Apple Calendar)
+        const event = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Majd & Tatiana Wedding//EN',
+          'BEGIN:VEVENT',
+          'DTSTART:20270627T180000',
+          'DTEND:20270628T020000',
+          'SUMMARY:Majd & Tatiana Wedding',
+          'DESCRIPTION:The wedding celebration of Majd Khalife & Tatiana Ghanem',
+          'LOCATION:Lebanon',
+          'STATUS:CONFIRMED',
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('\r\n');
+
+        const blob = new Blob([event], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'majd-tatiana-wedding.ics';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } else {
+        // Everyone else → Google Calendar
+        const gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+          '&text=' + encodeURIComponent('Majd & Tatiana Wedding') +
+          '&dates=20270627T180000/20270628T020000' +
+          '&details=' + encodeURIComponent('The wedding celebration of Majd Khalife & Tatiana Ghanem') +
+          '&location=' + encodeURIComponent('Lebanon');
+        window.open(gcalUrl, '_blank');
+      }
     }
 
     // Countdown
